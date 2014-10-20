@@ -18,17 +18,28 @@ class ConvertidorController extends \BaseController {
 	public function subirArchivo()
 	{
 		$archivoCancion = Input::file('cancion');
-		$format = Input::get('format');
-		$filename = $file->getClientOriginalName();
-		 // carpeta donde se va a guardar el archivo
+		$filename = $archivoCancion->getClientOriginalName();
 		$upload_success = Input::file('cancion')->move(public_path('archivos'), $filename);
-		$from = storage_path('cancion').$filename;
+		$ruta =  sprintf('%s/%s',public_path('archivos'), $filename);
+		$cantidad = Input::get('cantidad');
+		
 		$newFile = new Registro;
-		$newFile->tofile = $format;
+		$newFile->ruta = $ruta;
+		$newFile->cantidad = $cantidad;
+		$newFile->nombre = $filename;
+		$newFile->partido = false;
 		$newFile->save();
 		$id = $newFile->id;
-		//mensaje de cola para rabbitmq
-		$msg =  sprintf('{"id":%s,"file:"%s","parts":"%s","time_per_chunk":"%s"}',$id,$file,$parts,$time_per_chunk);
+		$tiempoPartes = Input::get('tiempoPartes');
+		if ($tiempoPartes == 1) {
+			$parts = $cantidad;
+			$time_per_chunk = 0;
+		} else {
+			$parts = 0;
+			$time_per_chunk = $cantidad;
+		}
+
+		$msg =  sprintf('{"id":%s,"file:"%s","parts":"%s","time_per_chunk":"%s"}',$id, $ruta, $parts, $time_per_chunk);
 		Helpers::Convert($msg);
 		
 		return 1;

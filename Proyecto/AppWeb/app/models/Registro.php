@@ -2,8 +2,8 @@
 
 class Registro extends Eloquent
 {
-    protected $table      = 'registro';
-    protected $fillable   = array('url ','format','nombre ','flag');
+    protected $table      = 'cancion';
+    protected $fillable   = array('ruta ','cantidad','nombre','partido');
     protected $guarded    = array('id');
     public    $timestamps = false;
 }

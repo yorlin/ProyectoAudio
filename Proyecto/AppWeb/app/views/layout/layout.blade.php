@@ -11,6 +11,7 @@
           {{ $content }}
       </div>
     <script src="//code.jquery.com/jquery.js"></script>
+    {{HTML::script('js/jquery.js');}}
     {{HTML::script('bootstrap/js/bootstrap.min.js');}}
     {{HTML::script('js/funciones.js');}}
    

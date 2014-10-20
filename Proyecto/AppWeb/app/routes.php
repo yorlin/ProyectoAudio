@@ -11,3 +11,4 @@
 |
 */
 Route::get('/', 'ConvertidorController@index');
+Route::post('partir', 'ConvertidorController@subirArchivo');
